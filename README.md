@@ -124,4 +124,4 @@ These are things that may not make it into the prototype, but will probably make
 
 This project is released under the MIT License.
 
-It contains Unreal Engine 4 Starter Content in `Content/StarterContent`, which is [free to distribute, according to Epic Games' staff.](https://answers.unrealengine.com/questions/24336/open-repository-and-startercontent.html)
+It contains Unreal Engine 4 Starter Content, which is [free to distribute, according to Epic Games' staff.](https://answers.unrealengine.com/questions/24336/open-repository-and-startercontent.html)
