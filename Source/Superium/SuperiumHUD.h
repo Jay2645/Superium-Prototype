@@ -19,6 +19,7 @@ public:
 
 private:
 	/** Crosshair asset pointer */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	class UTexture2D* CrosshairTex;
 
 };

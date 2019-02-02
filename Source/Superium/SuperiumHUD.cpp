@@ -9,15 +9,18 @@
 
 ASuperiumHUD::ASuperiumHUD()
 {
-	// Set the crosshair texture
-	static ConstructorHelpers::FObjectFinder<UTexture2D> CrosshairTexObj(TEXT("/Game/FirstPerson/Textures/FirstPersonCrosshair"));
-	CrosshairTex = CrosshairTexObj.Object;
+
 }
 
 
 void ASuperiumHUD::DrawHUD()
 {
 	Super::DrawHUD();
+
+	if (CrosshairTex == NULL)
+	{
+		return;
+	}
 
 	// Draw very simple crosshair
 
