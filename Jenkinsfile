@@ -13,7 +13,10 @@ pipeline {
     }
     stage('Build Project') {
       steps {
-        bat "\"${tool 'MSBuild'}\" Superium.sln /t:build /p:Platform=Win64;verbosity=diagnostic"
+        script {
+          def msbuild = tool name: 'MSBuild', type: 'hudson.plugins.msbuild.MsBuildInstallation'
+          bat "${msbuild} Superium.sln /t:build /p:Platform=Win64;verbosity=diagnostic"
+        }
       }
     }
     stage('Build Editor') {
