@@ -1,0 +1,1 @@
+"D:\Games\Unreal\UE_4.21\Engine\Build\BatchFiles\RunUAT.bat" -ScriptsForProject=D:/CI/Superium.uproject BuildCookRun -nocompile -nocompileeditor -installed -nop4 -project=D:/CI/Superium.uproject -cook -stage -archive -archivedirectory=D:/CI/Build/Win64 -package -clientconfig=Shipping -ue4exe=UE4Editor-Cmd.exe -pak -prereqs -distribution -targetplatform=Win64 -build -utf8output

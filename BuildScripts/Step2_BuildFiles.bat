@@ -1,0 +1,1 @@
+"D:\Games\Unreal\UE_4.21\Engine\Build\BatchFiles\Build.bat" SuperiumEditor Win64 Development "D:\CI\Superium.uproject" -WaitMutex

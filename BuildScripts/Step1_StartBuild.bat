@@ -1,0 +1,1 @@
+"D:\Games\Unreal\UE_4.21\Engine\Binaries\DotNET\UnrealBuildTool.exe" -projectfiles -project="D:\CI\Superium.uproject" -game -rocket -progress
