@@ -1,8 +1,6 @@
 #!groovy
 
 node( 'ue4 && vs2017' ) {
-    agent any
-
 	stage('Checkout') {
 		checkout scm
     }
