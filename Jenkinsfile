@@ -1,7 +1,6 @@
-#!groovy
-
 node( 'ue4 && vs2017' ) {
 	stage('Checkout') {
+
 		checkout scm
     }
 
