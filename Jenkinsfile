@@ -13,7 +13,6 @@ pipeline {
     }
     stage('Build Project') {
       steps {
-        bat 'nuget restore Superium.sln'
         bat "\"${tool 'MSBuild'}\" Superium.sln /t:build /p:Platform=Win64;verbosity=diagnostic"
       }
     }
