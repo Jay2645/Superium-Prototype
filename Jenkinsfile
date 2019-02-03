@@ -15,7 +15,7 @@ pipeline {
       steps {
         script {
           def msbuild = tool name: 'MSBuild', type: 'hudson.plugins.msbuild.MsBuildInstallation'
-          bat "\"${msbuild}\" Superium.sln /t:build /p:Platform=Win64;verbosity=diagnostic"
+          bat "\"${msbuild}\\msbuild.exe\" Superium.sln /t:build /p:Platform=Win64;verbosity=diagnostic"
         }
 
       }
