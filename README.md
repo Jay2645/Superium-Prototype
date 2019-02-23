@@ -4,6 +4,8 @@ This is the prototype for a FPS game where you play as a superhero (or supervill
 
 This is also a testbed for eventual mod support, with a goal of creating a modular game relying on Unreal Engine's DLC system.
 
+3D models/textures are Creative Commons Zero, created by the very lovely [Quaternius](https://www.patreon.com/quaternius).
+
 ## How the game works
 
 Not everything listed below is implemented. However, this is a roadmap for what I hope to achieve with this prototype. 

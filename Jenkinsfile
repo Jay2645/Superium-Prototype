@@ -1,11 +1,6 @@
 pipeline {
   agent any
   stages {
-    stage('Checkout') {
-      steps {
-        checkout scm
-      }
-    }
     stage('Generate Project Files') {
       steps {
         bat 'BuildScripts/Step1_StartBuild.bat'

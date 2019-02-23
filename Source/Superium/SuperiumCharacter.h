@@ -4,12 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+
+#include "SuperInterface.h"
+#include "Superpower.h"
+
 #include "SuperiumCharacter.generated.h"
 
 class UInputComponent;
 
 UCLASS(config=Game)
-class ASuperiumCharacter : public ACharacter
+class ASuperiumCharacter : public ACharacter, public ISuperInterface
 {
 	GENERATED_BODY()
 
@@ -46,30 +50,24 @@ class ASuperiumCharacter : public ACharacter
 	class UMotionControllerComponent* L_MotionController;
 
 public:
-	ASuperiumCharacter();
-
-protected:
-	virtual void BeginPlay();
-
-public:
 	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
 	float BaseTurnRate;
 
 	/** Base look up/down rate, in deg/sec. Other scaling may affect final rate. */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
 	float BaseLookUpRate;
 
 	/** Gun muzzle's offset from the characters location */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Gameplay)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
 	FVector GunOffset;
 
 	/** Projectile class to spawn */
-	UPROPERTY(EditDefaultsOnly, Category=Projectile)
+	UPROPERTY(EditDefaultsOnly, Category = Projectile)
 	TSubclassOf<class ASuperiumProjectile> ProjectileClass;
 
 	/** Sound to play each time we fire */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Gameplay)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
 	class USoundBase* FireSound;
 
 	/** AnimMontage to play each time we fire */
@@ -80,10 +78,38 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
 	uint32 bUsingMotionControllers : 1;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Superpowers)
+	TSet<TSubclassOf<USuperpower>> Powers;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Transient, Category = Superpowers)
+	TArray<USuperpower*> SuperpowerComponents;
+
+	// Whatever superpower is marked as "primary" at the moment.
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Transient, Category = Superpowers)
+	USuperpower* PrimaryPower;
+
+public:
+	ASuperiumCharacter();
+
+protected:
+	virtual void BeginPlay();
+
+protected:
+	// Begin ISuperInterface interface
+	virtual TSet<TSubclassOf<USuperpower>> GetSuperpowerClasses_Implementation() const override;
+	virtual TArray<USuperpower*> GetSuperpowerComponents_Implementation() const override;
+	virtual USkeletalMeshComponent* GetMesh_Implementation() const override;
+	virtual void PlayAnimation_Implementation(class UAnimMontage* PowerAnimation, class USkeletalMeshComponent* PowerMesh = NULL) override;
+	virtual void PlaySound_Implementation(class USoundBase* PowerSound) override;
+	virtual USceneComponent* AddNewComponent_Implementation(TSubclassOf<USceneComponent> NewComponent, FTransform ComponentTransform, USceneComponent* AttachParent = NULL, FName AttachTo = NAME_None) override;
+	virtual USuperpower* AddSuperpower_Implementation(TSubclassOf<USuperpower> NewPower) override;
+	virtual void RemoveSuperpower_Implementation(int32 Index) override;
+	// End ISuperInterface interface
+
 protected:
 	
 	/** Fires a projectile. */
-	void OnFire();
+	void OnPowerActivated();
+	void OnPowerDeactivated();
 
 	/** Resets HMD orientation and position in VR. */
 	void OnResetVR();
@@ -91,7 +117,7 @@ protected:
 	/** Handles moving forward/backward */
 	void MoveForward(float Val);
 
-	/** Handles stafing movement, left and right */
+	/** Handles strafing movement, left and right */
 	void MoveRight(float Val);
 
 	/**
@@ -134,9 +160,10 @@ protected:
 
 public:
 	/** Returns Mesh1P subobject **/
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Game|Character")
 	FORCEINLINE class USkeletalMeshComponent* GetMesh1P() const { return Mesh1P; }
 	/** Returns FirstPersonCameraComponent subobject **/
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Game|Character")
 	FORCEINLINE class UCameraComponent* GetFirstPersonCameraComponent() const { return FirstPersonCameraComponent; }
-
 };
 

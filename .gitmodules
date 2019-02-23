@@ -1,0 +1,3 @@
+[submodule "Plugins/Superium-Base"]
+	path = Plugins/Superium-Base
+	url = git@github.com:Jay2645/Superium-Base.git
