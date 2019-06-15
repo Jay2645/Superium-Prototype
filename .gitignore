@@ -77,3 +77,6 @@ Intermediate/*
 
 # Cache files for the editor to use
 DerivedDataCache/*
+
+# .pak files can be very large and should be managed through releases
+*.pak

@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 
 #include "SuperInterface.h"
+#include "CharacterStatInterface.h"
 #include "Superpower.h"
 
 #include "SuperiumCharacter.generated.h"
@@ -13,7 +14,7 @@
 class UInputComponent;
 
 UCLASS(config=Game)
-class ASuperiumCharacter : public ACharacter, public ISuperInterface
+class ASuperiumCharacter : public ACharacter, public ISuperInterface, public ICharacterStatInterface
 {
 	GENERATED_BODY()
 
@@ -48,6 +49,35 @@ class ASuperiumCharacter : public ACharacter, public ISuperInterface
 	/** Motion controller (left hand) */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	class UMotionControllerComponent* L_MotionController;
+
+protected:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (AllowPrivateAccess = "true", ClampMin = "0", ClampMax = "10"))
+	uint8 Perserverance;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (AllowPrivateAccess = "true", ClampMin = "0", ClampMax = "10"))
+	uint8 Offense;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (AllowPrivateAccess = "true", ClampMin = "0", ClampMax = "10"))
+	uint8 Willpower;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (AllowPrivateAccess = "true", ClampMin = "0", ClampMax = "10"))
+	uint8 Strength;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (AllowPrivateAccess = "true", ClampMin = "0", ClampMax = "10"))
+	uint8 Intuition;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (AllowPrivateAccess = "true", ClampMin = "0", ClampMax = "10"))
+	uint8 Education;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (AllowPrivateAccess = "true", ClampMin = "0", ClampMax = "10"))
+	uint8 Estate;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (AllowPrivateAccess = "true", ClampMin = "0", ClampMax = "10"))
+	uint8 Dexterity;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	UCurveFloat* HealthCurve;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	UCurveFloat* DefenseCurve;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	UCurveFloat* ExperienceCurve;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	UCurveFloat* DefenseRegenCurve;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	UCurveFloat* JumpHeightCurve;
 
 public:
 	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
@@ -87,6 +117,11 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Transient, Category = Superpowers)
 	USuperpower* PrimaryPower;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Transient, Category = Superpowers)
+	float Health;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Transient, Category = Superpowers)
+	float Defense;
+
 public:
 	ASuperiumCharacter();
 
@@ -97,13 +132,30 @@ protected:
 	// Begin ISuperInterface interface
 	virtual TSet<TSubclassOf<USuperpower>> GetSuperpowerClasses_Implementation() const override;
 	virtual TArray<USuperpower*> GetSuperpowerComponents_Implementation() const override;
-	virtual USkeletalMeshComponent* GetMesh_Implementation() const override;
+	virtual USkeletalMeshComponent* GetVisibleMesh_Implementation() const override;
 	virtual void PlayAnimation_Implementation(class UAnimMontage* PowerAnimation, class USkeletalMeshComponent* PowerMesh = NULL) override;
 	virtual void PlaySound_Implementation(class USoundBase* PowerSound) override;
 	virtual USceneComponent* AddNewComponent_Implementation(TSubclassOf<USceneComponent> NewComponent, FTransform ComponentTransform, USceneComponent* AttachParent = NULL, FName AttachTo = NAME_None) override;
 	virtual USuperpower* AddSuperpower_Implementation(TSubclassOf<USuperpower> NewPower) override;
 	virtual void RemoveSuperpower_Implementation(int32 Index) override;
 	// End ISuperInterface interface
+
+
+	virtual uint8 GetPerserverance_Implementation() const override;
+	virtual uint8 GetOffense_Implementation() const override;
+	virtual uint8 GetWillpower_Implementation() const override;
+	virtual uint8 GetStrength_Implementation() const override;
+	virtual uint8 GetIntuition_Implementation() const override;
+	virtual uint8 GetEducation_Implementation() const override;
+	virtual uint8 GetEstate_Implementation() const override;
+	virtual uint8 GetDexterity_Implementation() const override;
+	virtual float GetHealth_Implementation() const override;
+	virtual float GetMaxHealth_Implementation() const override;
+	virtual float GetDefense_Implementation() const override;
+	virtual float GetMaxDefense_Implementation() const override;
+	virtual float GetDefenseRegenRate_Implementation() const override;
+	virtual float GetExperienceMultiplier_Implementation() const override;
+	virtual float GetJumpHeightMultiplier_Implementation() const override;
 
 protected:
 	

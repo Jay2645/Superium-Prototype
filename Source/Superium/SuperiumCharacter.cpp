@@ -46,6 +46,9 @@ void ASuperiumCharacter::BeginPlay()
 	// Call the base class  
 	Super::BeginPlay();
 
+	Health = ICharacterStatInterface::Execute_GetMaxHealth(this);
+	Defense = ICharacterStatInterface::Execute_GetMaxDefense(this);
+
 	TArray<TSubclassOf<USuperpower>> powers = Powers.Array();
 	for (TSubclassOf<USuperpower> power : powers)
 	{
@@ -63,9 +66,17 @@ TArray<USuperpower*> ASuperiumCharacter::GetSuperpowerComponents_Implementation(
 	return SuperpowerComponents;
 }
 
-USkeletalMeshComponent* ASuperiumCharacter::GetMesh_Implementation() const
+USkeletalMeshComponent* ASuperiumCharacter::GetVisibleMesh_Implementation() const
 {
-	return Mesh1P;
+	APlayerController* controller = Cast<APlayerController>(GetController());
+	if (controller == NULL || !controller->IsLocalController())
+	{
+		return GetMesh();
+	}
+	else
+	{
+		return Mesh1P;
+	}
 }
 
 void ASuperiumCharacter::PlayAnimation_Implementation(UAnimMontage* PowerAnimation, USkeletalMeshComponent* PowerMesh)
@@ -77,7 +88,7 @@ void ASuperiumCharacter::PlayAnimation_Implementation(UAnimMontage* PowerAnimati
 		if (PowerMesh == NULL)
 		{
 			// Get the animation object for the arms mesh
-			AnimInstance = GetMesh()->GetAnimInstance();
+			AnimInstance = GetVisibleMesh()->GetAnimInstance();
 		}
 		else
 		{
@@ -169,6 +180,120 @@ void ASuperiumCharacter::RemoveSuperpower_Implementation(int32 Index)
 	if (PrimaryPower == NULL && SuperpowerComponents.Num() > 0)
 	{
 		PrimaryPower = SuperpowerComponents[0];
+	}
+}
+
+uint8 ASuperiumCharacter::GetPerserverance_Implementation() const
+{
+	return Perserverance;
+}
+
+uint8 ASuperiumCharacter::GetOffense_Implementation() const
+{
+	return Offense;
+}
+
+uint8 ASuperiumCharacter::GetWillpower_Implementation() const
+{
+	return Willpower;
+}
+
+uint8 ASuperiumCharacter::GetStrength_Implementation() const
+{
+	return Strength;
+}
+
+uint8 ASuperiumCharacter::GetIntuition_Implementation() const
+{
+	return Intuition;
+}
+
+uint8 ASuperiumCharacter::GetEducation_Implementation() const
+{
+	return Education;
+}
+
+uint8 ASuperiumCharacter::GetEstate_Implementation() const
+{
+	return Estate;
+}
+
+uint8 ASuperiumCharacter::GetDexterity_Implementation() const
+{
+	return Dexterity;
+}
+
+float ASuperiumCharacter::GetHealth_Implementation() const
+{
+	return Health;
+}
+
+float ASuperiumCharacter::GetMaxHealth_Implementation() const
+{
+	if (HealthCurve == NULL)
+	{
+		return -1.0f;
+	}
+	else
+	{
+		float totalHealth = ((float)Perserverance + (float)Willpower) / 2.0f;
+		return HealthCurve->GetFloatValue(totalHealth);
+	}
+}
+
+float ASuperiumCharacter::GetDefense_Implementation() const
+{
+	return Defense;
+}
+
+float ASuperiumCharacter::GetMaxDefense_Implementation() const
+{
+	if (DefenseCurve == NULL)
+	{
+		return -1.0f;
+	}
+	else
+	{
+		float totalDefense = ((float)Offense + (float)Strength + (float)Dexterity) / 3.0f;
+		return DefenseCurve->GetFloatValue(totalDefense);
+	}
+}
+
+float ASuperiumCharacter::GetDefenseRegenRate_Implementation() const
+{
+	if (DefenseRegenCurve == NULL)
+	{
+		return 1.0f;
+	}
+	else
+	{
+		return DefenseRegenCurve->GetFloatValue((float)Perserverance);
+	}
+}
+
+float ASuperiumCharacter::GetExperienceMultiplier_Implementation() const
+{
+	if (ExperienceCurve == NULL)
+	{
+		return 1.0f;
+	}
+	else
+	{
+		float totalExperience = ((float)Intuition + (float)Education + (float)Estate) / 3.0f;
+		return ExperienceCurve->GetFloatValue(totalExperience);
+	}
+}
+
+float ASuperiumCharacter::GetJumpHeightMultiplier_Implementation() const
+{
+	if (JumpHeightCurve == NULL)
+	{
+		return 1.0f;
+	}
+	else
+	{
+		float jumpHeight = ((float)Strength + (float)Dexterity) / 2.0f;
+		return JumpHeightCurve->GetFloatValue(jumpHeight);
 	}
 }
 
